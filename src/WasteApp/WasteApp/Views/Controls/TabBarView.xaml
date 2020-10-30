@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:WasteApp"
+             x:Class="WasteApp.TabBarView">
+
+    <Grid x:Name="mainGrid">
+        <Path x:Name="backgroundPath"
+              StrokeThickness="0" Data="{Binding Source={RelativeSource AncestorType={x:Type local:TabBarView}}, Path=BackgroundPathGeometry}"/>
+        <Grid x:Name="tabsGrid" Margin="32,0" VerticalOptions="End"
+              ColumnDefinitions="*,*,*">
+            <Grid.Resources>
+                <Style TargetType="{x:Type local:SvgView}">
+                    <Setter Property="VerticalOptions" Value="Center"/>
+                    <Setter Property="HorizontalOptions" Value="Center"/>
+                    <Setter Property="Colour" Value="#ffffff"/>
+                    <Setter Property="HeightRequest" Value="18"/>
+                </Style>
+            </Grid.Resources>
+
+            <local:SvgView Path="{StaticResource HousePath}"/>
+            <local:SvgView Grid.Column="1" Path="{StaticResource ScanPath}" HeightRequest="20"/>
+            <local:SvgView Grid.Column="2" Path="{StaticResource CalendarPath}"/>
+
+            <Ellipse x:Name="homeEllipse" Fill="#ffffff"
+                     VerticalOptions="Center" HorizontalOptions="Center"
+                     WidthRequest="6" HeightRequest="6" Margin="0,0,0.3,30"/>
+            <Ellipse x:Name="calendarEllipse" Grid.Column="2" Fill="#ffffff"
+                     VerticalOptions="Center" HorizontalOptions="Center"
+                     WidthRequest="6" HeightRequest="6" Margin="0,0,0.5,30"/>
+
+            <BoxView BackgroundColor="Transparent">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="HomeTapped"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+            <BoxView Grid.Column="1" BackgroundColor="Transparent">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ScanTapped"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+            <BoxView Grid.Column="2" BackgroundColor="Transparent">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="CalendarTapped"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+        </Grid>
+    </Grid>
+    
+</ContentView>

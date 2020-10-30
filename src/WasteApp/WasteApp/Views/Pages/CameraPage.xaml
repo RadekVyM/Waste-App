@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:WasteApp"
+             xmlns:sh="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="WasteApp.CameraPage"
+             
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False"
+             
+             BackgroundColor="{DynamicResource BackgroundColour}">
+
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type skia:SKCanvasView}">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="Margin" Value="35,0,35,50"/>
+            </Style>
+        </Grid.Resources>
+        
+        <local:CameraPreview x:Name="cameraPreview" HorizontalOptions="Fill" VerticalOptions="Fill" SizeChanged="CameraPreviewSizeChanged"/>
+        <Frame Padding="{x:Static local:StatusBar.Padding}" BackgroundColor="Transparent" 
+               HorizontalOptions="Start" VerticalOptions="Start">
+            <local:SvgView Margin="30,20,0,0" Colour="{DynamicResource DarkDetailColour}" Path="{DynamicResource BackArrowPath}"
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           HeightRequest="20" WidthRequest="20">
+                <local:SvgView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                </local:SvgView.GestureRecognizers>
+            </local:SvgView>
+        </Frame>
+
+        <Grid VerticalOptions="End" HeightRequest="120" Margin="25">
+            <sh:Shadows Shades="{StaticResource Shade}" Margin="5,30,5,5"
+                        CornerRadius="15" VerticalOptions="Fill">
+                <Frame CornerRadius="15" HasShadow="False" BackgroundColor="White"
+                       VerticalOptions="Fill" Padding="0">
+                    <Grid RowDefinitions="*,28" ColumnDefinitions="35,*" Margin="16,4,16,14" RowSpacing="0">
+                        <Label Grid.ColumnSpan="2" Text="{Binding FoundMaterial.Name}" FontFamily="BoldFont" FontSize="15" CharacterSpacing="1"
+                               VerticalOptions="Center"/>
+                        <BoxView Grid.Row="1" BackgroundColor="{Binding FoundMaterial.WasteProcessingEnum, Converter={StaticResource WasteProcessingToColourConverter}}"
+                                 CornerRadius="8"/>
+                        <local:SvgView Grid.Row="1" Colour="{DynamicResource DarkDetailColour}" Path="{Binding FoundMaterial.WasteProcessingEnum, Converter={StaticResource WasteProcessingToPathConverter}}"
+                                       VerticalOptions="Center" HorizontalOptions="Center"
+                                       HeightRequest="15" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding FoundMaterial.ShortDescription}"
+                               VerticalOptions="Center" Margin="3,0,0,0"/>
+                    </Grid>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding MaterialCommand}"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+            </sh:Shadows>
+            <Image Source="{Binding FoundMaterial.Image, Converter={StaticResource ImageSourceConverter}}" 
+                   VerticalOptions="Start" HorizontalOptions="End"
+                   HeightRequest="72" Margin="0,0,30,0"/>
+        </Grid>
+
+        <skia:SKCanvasView x:Name="scanCanvasView" PaintSurface="ScanCanvasViewPaintSurface"/>
+        <skia:SKCanvasView x:Name="cornersCanvasView" PaintSurface="CornersCanvasViewPaintSurface"/>
+    </Grid>
+</ContentPage>

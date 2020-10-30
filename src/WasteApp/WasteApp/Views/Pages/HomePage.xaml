@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:core="clr-namespace:WasteApp.Core;assembly=WasteApp.Core"
+             xmlns:local="clr-namespace:WasteApp"
+             xmlns:sh="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="WasteApp.HomePage"
+             
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False"
+             
+             BackgroundColor="{DynamicResource BackgroundColour}">
+
+    <Grid RowDefinitions="80,*" Padding="{x:Static local:StatusBar.Padding}">
+        <Grid ColumnDefinitions="*,65" ColumnSpacing="10" Margin="20,0,30,0" VerticalOptions="End">
+            <sh:Shadows Shades="{StaticResource Shade}" Margin="5"
+                        CornerRadius="10" VerticalOptions="Center" HeightRequest="45">
+                <Frame CornerRadius="10" HasShadow="False" BackgroundColor="White"
+                       VerticalOptions="Center" Padding="0">
+                    <StackLayout Orientation="Horizontal"
+                                 Margin="20,5" Spacing="0">
+                        <local:SvgView Path="{StaticResource MagnifyingGlassPath}" Colour="{DynamicResource DarkDetailColour}"
+                                       VerticalOptions="Center" HorizontalOptions="Start"
+                                       HeightRequest="20" WidthRequest="20" Margin="0,0,3,0"/>
+                        <Entry Placeholder="Search for an item" PlaceholderColor="LightGray" FontSize="14" FontFamily="BoldFont" TextColor="{DynamicResource DarkDetailColour}"
+                               HorizontalOptions="FillAndExpand" Margin="0,0,0,-2"/>
+                    </StackLayout>
+                </Frame>
+            </sh:Shadows>
+
+            <Image Source="{Binding Source={RelativeSource AncestorType={x:Type local:HomePage}}, Path=AvatarImage, Converter={StaticResource ImageSourceConverter}}"
+                   Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
+                   HeightRequest="50" WidthRequest="50">
+
+                <Image.Clip>
+                    <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25"/>
+                </Image.Clip>
+            </Image>
+        </Grid>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding PopularItems}">
+            <CollectionView.Header>
+                <Grid RowDefinitions="20,125,185,60">
+                    <CollectionView Grid.Row="1" ItemsSource="{Binding WasteProcessings}" HeightRequest="150">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="0"/>
+                        </CollectionView.ItemsLayout>
+                        
+                        <CollectionView.Header>
+                            <BoxView Background="Transparent" HorizontalOptions="Start" WidthRequest="20"/>
+                        </CollectionView.Header>
+                        <CollectionView.Footer>
+                            <BoxView Background="Transparent" HorizontalOptions="Start" WidthRequest="20"/>
+                        </CollectionView.Footer>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Spacing="0">
+                                    <sh:Shadows Shades="{StaticResource Shade}" Margin="10"
+                                                CornerRadius="10">
+                                        <Frame x:Name="frame" CornerRadius="10" HasShadow="False"
+                                               BackgroundColor="{Binding ., Converter={StaticResource WasteProcessingToColourConverter}}"
+                                               Padding="0">
+                                            <local:SvgView Colour="{DynamicResource DarkDetailColour}" Path="{Binding ., Converter={StaticResource WasteProcessingToPathConverter}}"
+                                                           IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type core:HomePageViewModel}}, Path=SelectedWasteProcessing, 
+                                                                               Converter={StaticResource SelectionConverter}, ConverterParameter={x:Reference frame}}">
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup Name="CommonStates">
+                                                        <VisualState Name="Normal">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="WidthRequest" Value="70"/>
+                                                                <Setter Property="HeightRequest" Value="40"/>
+                                                                <Setter Property="Margin" Value="18"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState Name="Disabled">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="WidthRequest" Value="40"/>
+                                                                <Setter Property="HeightRequest" Value="22"/>
+                                                                <Setter Property="Margin" Value="14"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                            </local:SvgView>
+                                        </Frame>
+                                    </sh:Shadows>
+
+                                    <Label Text="{Binding .}" HorizontalOptions="Center" VerticalOptions="Start" FontSize="14" Margin="0,2,0,0" CharacterSpacing="1"
+                                           IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type core:HomePageViewModel}}, Path=SelectedWasteProcessing, 
+                                                               Converter={StaticResource SelectionConverter}, ConverterParameter={x:Reference frame}}">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="FontSize" Value="16"/>
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState Name="Disabled">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="FontSize" Value="14"/>
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Label>
+
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type core:HomePageViewModel}}, Path=WasteProcessingSelectedCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <CollectionView Grid.Row="2" ItemsSource="{Binding Materials}" HeightRequest="200">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="0"/>
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.Header>
+                            <BoxView Background="Transparent" HorizontalOptions="Start" WidthRequest="20"/>
+                        </CollectionView.Header>
+                        <CollectionView.Footer>
+                            <BoxView Background="Transparent" HorizontalOptions="Start" WidthRequest="20"/>
+                        </CollectionView.Footer>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <ContentView Padding="0" BackgroundColor="Transparent">
+                                    <sh:Shadows Shades="{StaticResource Shade}" Margin="10"
+                                                CornerRadius="20">
+                                        <Frame x:Name="frame" CornerRadius="20" HasShadow="False"
+                                               BackgroundColor="White"
+                                               Padding="0">
+                                            <Grid RowDefinitions="*, 36" WidthRequest="150" RowSpacing="0">
+                                                <Image Source="{Binding Image, Converter={StaticResource ImageSourceConverter}}" Aspect="AspectFit"
+                                                       Margin="20" VerticalOptions="End"/>
+
+                                                <Label Grid.Row="1" Text="{Binding Name}" FontSize="15"
+                                                       HorizontalOptions="Center" VerticalOptions="Start"/>
+                                            </Grid>
+
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type core:HomePageViewModel}}, Path=MaterialCommand}"/>
+                                            </Frame.GestureRecognizers>
+                                        </Frame>
+                                    </sh:Shadows>
+                                </ContentView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <StackLayout Spacing="0" Margin="30,0,0,5" Grid.Row="3" VerticalOptions="End">
+                        <Label Text="Popular items" FontSize="15" FontFamily="BoldFont" CharacterSpacing="1"/>
+                        <BoxView BackgroundColor="{DynamicResource DarkDetailColour}" 
+                                 VerticalOptions="Start" HorizontalOptions="Start"
+                                 HeightRequest="2.5" WidthRequest="50"
+                                 Margin="1,1,0,0"/>
+                    </StackLayout>
+                </Grid>
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ContentView Padding="0" BackgroundColor="Transparent">
+                        <sh:Shadows Shades="{StaticResource Shade}" Margin="30,10"
+                                    CornerRadius="15">
+                            <Frame x:Name="frame" CornerRadius="15" HasShadow="False"
+                                   BackgroundColor="White"
+                                   Padding="0">
+                                <Grid ColumnDefinitions="90, *" ColumnSpacing="0" VerticalOptions="Start"
+                                      HeightRequest="90">
+                                    <Image Source="{Binding Image, Converter={StaticResource ImageSourceConverter}}" Aspect="AspectFit"
+                                           Margin="20" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+                                    <Label Grid.Column="1" Text="{Binding Name}" FontSize="16"
+                                           VerticalOptions="Center" HorizontalOptions="Start"/>
+                                </Grid>
+                            </Frame>
+                        </sh:Shadows>
+                    </ContentView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.Footer>
+                <BoxView HeightRequest="80" BackgroundColor="Transparent"/>
+            </CollectionView.Footer>
+        </CollectionView>
+
+        <skia:SKCanvasView x:Name="gradientCanvasView" Grid.Row="1" PaintSurface="GradientPaintSurface"
+                           VerticalOptions="Start" HeightRequest="20"/>
+    </Grid>
+    
+</ContentPage>

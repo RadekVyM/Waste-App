@@ -1,4 +1,4 @@
-# Waste-App
+# Waste App
 A **Xamarin.Forms** application based on [Waste App](https://dribbble.com/shots/14433671-Waste-App) design by [Sara Salehi](https://dribbble.com/SaraSalehi).
 
 ## Original design

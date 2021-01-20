@@ -13,8 +13,6 @@ namespace WasteApp
         {
             InitializeComponent();
 
-            Device.SetFlags(new string[] { "Shapes_Experimental" });
-
             var services = new ServiceCollection();
 
             services.AddSingleton<INavigationService, NavigationService>();

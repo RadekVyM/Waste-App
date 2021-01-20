@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:WasteApp"
              xmlns:sh="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
-             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="WasteApp.CameraPage"
              
              Shell.NavBarIsVisible="False"
@@ -13,23 +13,24 @@
 
     <Grid>
         <Grid.Resources>
-            <Style TargetType="{x:Type skia:SKCanvasView}">
+            <Style TargetType="{x:Type Frame}" x:Key="scanFrameStyle">
                 <Setter Property="VerticalOptions" Value="Center"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="Margin" Value="35,0,35,50"/>
             </Style>
         </Grid.Resources>
+
+        <xct:CameraView HorizontalOptions="Fill" VerticalOptions="Fill"/>
         
-        <local:CameraPreview x:Name="cameraPreview" HorizontalOptions="Fill" VerticalOptions="Fill" SizeChanged="CameraPreviewSizeChanged"/>
         <Frame Padding="{x:Static local:StatusBar.Padding}" BackgroundColor="Transparent" 
                HorizontalOptions="Start" VerticalOptions="Start">
-            <local:SvgView Margin="30,20,0,0" Colour="{DynamicResource DarkDetailColour}" Path="{DynamicResource BackArrowPath}"
-                           VerticalOptions="Center" HorizontalOptions="Center"
-                           HeightRequest="20" WidthRequest="20">
-                <local:SvgView.GestureRecognizers>
+            <Path Margin="30,20,0,0" Fill="{DynamicResource DarkDetailBrush}" Data="{DynamicResource BackArrowGeometry}"
+                  VerticalOptions="Center" HorizontalOptions="Center"
+                  HeightRequest="20" WidthRequest="20">
+                <Path.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
-                </local:SvgView.GestureRecognizers>
-            </local:SvgView>
+                </Path.GestureRecognizers>
+            </Path>
         </Frame>
 
         <Grid VerticalOptions="End" HeightRequest="120" Margin="25">
@@ -42,9 +43,9 @@
                                VerticalOptions="Center"/>
                         <BoxView Grid.Row="1" BackgroundColor="{Binding FoundMaterial.WasteProcessingEnum, Converter={StaticResource WasteProcessingToColourConverter}}"
                                  CornerRadius="8"/>
-                        <local:SvgView Grid.Row="1" Colour="{DynamicResource DarkDetailColour}" Path="{Binding FoundMaterial.WasteProcessingEnum, Converter={StaticResource WasteProcessingToPathConverter}}"
-                                       VerticalOptions="Center" HorizontalOptions="Center"
-                                       HeightRequest="15" />
+                        <Path Grid.Row="1" Fill="{DynamicResource DarkDetailBrush}" Data="{Binding FoundMaterial.WasteProcessingEnum, Converter={StaticResource WasteProcessingToPathConverter}}"
+                              VerticalOptions="Center" HorizontalOptions="Center"
+                              HeightRequest="15" WidthRequest="17"/>
                         <Label Grid.Row="1" Grid.Column="1" Text="{Binding FoundMaterial.ShortDescription}"
                                VerticalOptions="Center" Margin="3,0,0,0"/>
                     </Grid>
@@ -58,7 +59,16 @@
                    HeightRequest="72" Margin="0,0,30,0"/>
         </Grid>
 
-        <skia:SKCanvasView x:Name="scanCanvasView" PaintSurface="ScanCanvasViewPaintSurface"/>
-        <skia:SKCanvasView x:Name="cornersCanvasView" PaintSurface="CornersCanvasViewPaintSurface"/>
+        <Frame x:Name="scanFrame" Padding="0" HasShadow="False" CornerRadius="30" Style="{StaticResource scanFrameStyle}" BackgroundColor="Transparent">
+            <AbsoluteLayout>
+                <BoxView x:Name="boxView" HorizontalOptions="Start" VerticalOptions="Start"
+                     CornerRadius="30"/>
+            </AbsoluteLayout>
+        </Frame>
+
+        <Path x:Name="cornersPath"
+              HorizontalOptions="Center" VerticalOptions="Center"
+              Stroke="{DynamicResource DarkDetailBrush}" Aspect="None"
+              Margin="0,0,0,50"/>
     </Grid>
 </ContentPage>

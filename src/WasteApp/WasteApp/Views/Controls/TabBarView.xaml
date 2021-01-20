@@ -5,22 +5,24 @@
              x:Class="WasteApp.TabBarView">
 
     <Grid x:Name="mainGrid">
-        <Path x:Name="backgroundPath"
+        <Path x:Name="backgroundPath" Aspect="Fill" Margin="-1"
               StrokeThickness="0" Data="{Binding Source={RelativeSource AncestorType={x:Type local:TabBarView}}, Path=BackgroundPathGeometry}"/>
         <Grid x:Name="tabsGrid" Margin="32,0" VerticalOptions="End"
               ColumnDefinitions="*,*,*">
             <Grid.Resources>
-                <Style TargetType="{x:Type local:SvgView}">
+                <Style TargetType="{x:Type Path}">
                     <Setter Property="VerticalOptions" Value="Center"/>
                     <Setter Property="HorizontalOptions" Value="Center"/>
-                    <Setter Property="Colour" Value="#ffffff"/>
+                    <Setter Property="Fill" Value="#ffffff"/>
                     <Setter Property="HeightRequest" Value="18"/>
+                    <Setter Property="WidthRequest" Value="18"/>
+                    <Setter Property="Aspect" Value="Uniform"/>
                 </Style>
             </Grid.Resources>
 
-            <local:SvgView Path="{StaticResource HousePath}"/>
-            <local:SvgView Grid.Column="1" Path="{StaticResource ScanPath}" HeightRequest="20"/>
-            <local:SvgView Grid.Column="2" Path="{StaticResource CalendarPath}"/>
+            <Path Data="{StaticResource HouseGeometry}"/>
+            <Path Grid.Column="1" Data="{StaticResource ScanGeometry}" HeightRequest="20" WidthRequest="20"/>
+            <Path Grid.Column="2" Data="{StaticResource CalendarGeometry}"/>
 
             <Ellipse x:Name="homeEllipse" Fill="#ffffff"
                      VerticalOptions="Center" HorizontalOptions="Center"

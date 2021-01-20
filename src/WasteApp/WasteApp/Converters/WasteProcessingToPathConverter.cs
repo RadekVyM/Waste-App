@@ -2,6 +2,7 @@
 using System.Globalization;
 using WasteApp.Core;
 using Xamarin.Forms;
+using Xamarin.Forms.Shapes;
 
 namespace WasteApp
 {
@@ -9,7 +10,7 @@ namespace WasteApp
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string path = "";
+            Geometry path = null;
 
             if (value == null)
                 return path;
@@ -17,16 +18,16 @@ namespace WasteApp
             switch ((WasteProcessingEnum)value)
             {
                 case WasteProcessingEnum.Recycle:
-                    path = App.Current.Resources.GetValue<string>("RecyclePath");
+                    path = App.Current.Resources.GetValue<Geometry>("RecycleGeometry");
                     break;
                 case WasteProcessingEnum.Green:
-                    path = App.Current.Resources.GetValue<string>("LeavePath");
+                    path = App.Current.Resources.GetValue<Geometry>("LeaveGeometry");
                     break;
                 case WasteProcessingEnum.Garbage:
-                    path = App.Current.Resources.GetValue<string>("RubbishBinPath");
+                    path = App.Current.Resources.GetValue<Geometry>("RubbishBinGeometry");
                     break;
                 case WasteProcessingEnum.Yard:
-                    path = App.Current.Resources.GetValue<string>("TreePath");
+                    path = App.Current.Resources.GetValue<Geometry>("TreeGeometry");
                     break;
             }
 

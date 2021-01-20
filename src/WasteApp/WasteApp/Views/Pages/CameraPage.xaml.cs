@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SkiaSharp;
-using SkiaSharp.Views.Forms;
 using System;
 using System.Diagnostics;
 using WasteApp.Core;
-using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Shapes;
 using Xamarin.Forms.Xaml;
 
 namespace WasteApp
@@ -13,22 +11,21 @@ namespace WasteApp
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CameraPage : ContentPage
     {
-        bool isCameraOpen = false;
         float whitePosition = 0f;
         float transparentPosition = 0f;
-        float cornerRadius => (float)(30 * DeviceDisplay.MainDisplayInfo.Density);
+        double cornerRadius => 30;
+        double cornersStrokeThickness => 4;
         Stopwatch stopwatch;
         bool pageIsActive;
-        SKPaint overlayPaint;
-        SKColor transparentColour;
-        SKColor whiteColour;
+        Color transparentColour;
+        Color whiteColour;
 
         public CameraPage()
         {
             stopwatch = new Stopwatch();
 
-            transparentColour = Color.White.ToSKColor().WithAlpha((byte)(0 * byte.MaxValue));
-            whiteColour = Color.White.ToSKColor().WithAlpha((byte)(0.5 * byte.MaxValue));
+            transparentColour = Color.FromHex("#00000000");
+            whiteColour = Color.FromHex("#80ffffff");
 
             InitializeComponent();
 
@@ -63,7 +60,26 @@ namespace WasteApp
                     transparentPosition = f - 1f < 0f ? 1f : Math.Abs(f - 2f);
                 }
 
-                scanCanvasView.InvalidateSurface();
+                bool down = transparentPosition - whitePosition < 0;
+
+                boxView.TranslateTo(0, down ? scanFrame.Height * transparentPosition : scanFrame.Height * whitePosition, 0);
+                if (down && whitePosition != 1)
+                    boxView.HeightRequest = scanFrame.Height * whitePosition;
+                else if (down && whitePosition == 1)
+                    boxView.HeightRequest = scanFrame.Height - (scanFrame.Height * transparentPosition);
+
+                if (!down && whitePosition != 0)
+                    boxView.HeightRequest = scanFrame.Height * (1 - whitePosition);
+                else if (!down && whitePosition == 0)
+                    boxView.HeightRequest = scanFrame.Height - (scanFrame.Height * (1 - transparentPosition));
+
+                boxView.Background = new LinearGradientBrush(
+                    new GradientStopCollection
+                    {
+                        new GradientStop(down ? transparentColour : whiteColour, down ? transparentPosition : whitePosition),
+                        new GradientStop(down ? whiteColour : transparentColour, down ? whitePosition : transparentPosition)
+                    },
+                    new Point(0,0), new Point(0, 1));
 
                 if (!pageIsActive)
                 {
@@ -81,83 +97,62 @@ namespace WasteApp
 
         private void CameraPageSizeChanged(object sender, EventArgs e)
         {
-            scanCanvasView.WidthRequest = Width - scanCanvasView.Margin.HorizontalThickness;
-            scanCanvasView.HeightRequest = Height * 0.48d;
+            scanFrame.WidthRequest = Width - scanFrame.Margin.HorizontalThickness;
+            scanFrame.HeightRequest = Height * 0.48d;
+            boxView.WidthRequest = scanFrame.WidthRequest;
 
-            cornersCanvasView.WidthRequest = Width - scanCanvasView.Margin.HorizontalThickness;
-            cornersCanvasView.HeightRequest = Height * 0.48d;
-        }
+            cornersPath.WidthRequest = scanFrame.WidthRequest + cornersStrokeThickness;
+            cornersPath.HeightRequest = scanFrame.HeightRequest + cornersStrokeThickness;
+            cornersPath.StrokeThickness = cornersStrokeThickness;
 
-        private async void CameraPreviewSizeChanged(object sender, EventArgs e)
-        {
-            if (isCameraOpen)
-                return;
+            double strokeMargin = cornersStrokeThickness / 2;
 
-            var result = await Permissions.CheckStatusAsync<Permissions.Camera>();
-
-            if (result == PermissionStatus.Granted)
+            cornersPath.Data = new PathGeometry
             {
-                cameraPreview.Open();
-                isCameraOpen = true;
-            }
-            else
-                await Shell.Current.Navigation.PopAsync();
-        }
-
-        private void ScanCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs e)
-        {
-            var canvas = e.Surface.Canvas;
-            var info = e.Info;
-
-            canvas.Clear();
-
-            SKRoundRect roundRect = new SKRoundRect(new SKRect(4, 4, info.Width - 4, info.Height - 4), cornerRadius - 4, cornerRadius - 4);
-
-            if (overlayPaint == null)
-                overlayPaint = new SKPaint();
-            
-            bool down = transparentPosition - whitePosition < 0;
-
-            overlayPaint.Shader = SKShader.CreateLinearGradient(
-                            new SKPoint(info.Rect.Left, info.Rect.Top),
-                            new SKPoint(info.Rect.Left, info.Height),
-                            new SKColor[]
-                            {
-                                down ? transparentColour : whiteColour,
-                                down ? whiteColour : transparentColour
-                            },
-                            new float[] { down ? transparentPosition : whitePosition, down ? whitePosition : transparentPosition },
-                            SKShaderTileMode.Clamp);
-
-            canvas.ClipRoundRect(roundRect, antialias: true);
-
-            canvas.DrawRoundRect(0, down ? info.Height * transparentPosition : info.Height * whitePosition, info.Width, down ? info.Height * whitePosition : info.Height * transparentPosition, cornerRadius, cornerRadius, overlayPaint);
-        }
-
-        private void CornersCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs e)
-        {
-            var canvas = e.Surface.Canvas;
-            var info = e.Info;
-
-            canvas.Clear();
-
-            SKRoundRect roundRect = new SKRoundRect(new SKRect(0, 0, info.Width, info.Height), cornerRadius, cornerRadius);
-
-            using(SKPaint cornerPaint = new SKPaint())
-            {
-                cornerPaint.Color = App.Current.Resources.GetValue<Color>("DarkDetailColour").ToSKColor();
-                cornerPaint.Style = SKPaintStyle.Stroke;
-                cornerPaint.StrokeWidth = 20;
-                cornerPaint.IsAntialias = true;
-                cornerPaint.StrokeCap = SKStrokeCap.Butt;
-                cornerPaint.StrokeJoin = SKStrokeJoin.Round;
-
-                canvas.ClipRoundRect(roundRect, antialias: true);
-                canvas.ClipRect(new SKRect(0, cornerRadius * 1.5f, info.Width, info.Height - (cornerRadius * 1.5f)), SKClipOperation.Difference);
-                canvas.ClipRect(new SKRect(cornerRadius * 1.5f, 0, info.Width - (cornerRadius * 1.5f), info.Height), SKClipOperation.Difference);
-
-                canvas.DrawRoundRect(roundRect, cornerPaint);
-            }
+                Figures = new PathFigureCollection
+                {
+                    new PathFigure
+                    {
+                        IsClosed = false, IsFilled = false, StartPoint = new Point(strokeMargin, (cornerRadius * 1.5) + strokeMargin),
+                        Segments = new PathSegmentCollection
+                        {
+                            new LineSegment(new Point(strokeMargin, cornerRadius + strokeMargin + 1)),
+                            new QuadraticBezierSegment(new Point(strokeMargin, strokeMargin), new Point(cornerRadius + strokeMargin + 1, strokeMargin)),
+                            new LineSegment(new Point((cornerRadius * 1.5) + strokeMargin, strokeMargin))
+                        }
+                    },
+                    new PathFigure
+                    {
+                        IsClosed = false, IsFilled = false, StartPoint = new Point(cornersPath.WidthRequest - (cornerRadius * 1.5) - strokeMargin, strokeMargin),
+                        Segments = new PathSegmentCollection
+                        {
+                            new LineSegment(new Point(cornersPath.WidthRequest - cornerRadius - strokeMargin - 1, strokeMargin)),
+                            new QuadraticBezierSegment(new Point(cornersPath.WidthRequest - strokeMargin, strokeMargin), new Point(cornersPath.WidthRequest - strokeMargin, strokeMargin + cornerRadius + 1)),
+                            new LineSegment(new Point(cornersPath.WidthRequest - strokeMargin, (cornerRadius * 1.5) + strokeMargin))
+                        }
+                    },
+                    new PathFigure
+                    {
+                        IsClosed = false, IsFilled = false, StartPoint = new Point(cornersPath.WidthRequest - strokeMargin, cornersPath.HeightRequest - (cornerRadius * 1.5) - strokeMargin),
+                        Segments = new PathSegmentCollection
+                        {
+                            new LineSegment(new Point(cornersPath.WidthRequest - strokeMargin, cornersPath.HeightRequest - cornerRadius - strokeMargin - 1)),
+                            new QuadraticBezierSegment(new Point(cornersPath.WidthRequest - strokeMargin, cornersPath.HeightRequest - strokeMargin), new Point(cornersPath.WidthRequest - strokeMargin - cornerRadius - 1, cornersPath.HeightRequest - strokeMargin)),
+                            new LineSegment(new Point(cornersPath.WidthRequest - strokeMargin - (cornerRadius * 1.5), cornersPath.HeightRequest - strokeMargin))
+                        }
+                    },
+                    new PathFigure
+                    {
+                        IsClosed = false, IsFilled = false, StartPoint = new Point(strokeMargin + (cornerRadius * 1.5), cornersPath.HeightRequest - strokeMargin),
+                        Segments = new PathSegmentCollection
+                        {
+                            new LineSegment(new Point(cornerRadius + strokeMargin + 1, cornersPath.HeightRequest - strokeMargin)),
+                            new QuadraticBezierSegment(new Point(strokeMargin, cornersPath.HeightRequest - strokeMargin), new Point(strokeMargin, cornersPath.HeightRequest - cornerRadius - strokeMargin - 1)),
+                            new LineSegment(new Point(strokeMargin, cornersPath.HeightRequest - (cornerRadius * 1.5) - strokeMargin))
+                        }
+                    }
+                }
+            };
         }
     }
 }

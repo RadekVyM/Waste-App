@@ -6,3 +6,12 @@ D:\Radek\VisualStudio\Xamarin\WasteApp\WasteApp.Core\obj\Debug\netstandard2.0\Wa
 D:\Radek\VisualStudio\Xamarin\WasteApp\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.csproj.CoreCompileInputs.cache
 D:\Radek\VisualStudio\Xamarin\WasteApp\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.dll
 D:\Radek\VisualStudio\Xamarin\WasteApp\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.pdb
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\bin\Debug\netstandard2.0\WasteApp.Core.deps.json
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\bin\Debug\netstandard2.0\WasteApp.Core.dll
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\bin\Debug\netstandard2.0\WasteApp.Core.pdb
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.csprojAssemblyReference.cache
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.AssemblyInfoInputs.cache
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.AssemblyInfo.cs
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.csproj.CoreCompileInputs.cache
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.dll
+D:\git\RadekVyM\Waste-App\src\WasteApp.Core\obj\Debug\netstandard2.0\WasteApp.Core.pdb

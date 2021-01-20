@@ -18,33 +18,33 @@
 
         <Grid Padding="{x:Static local:StatusBar.Padding}" Margin="30,20,30,0"
               VerticalOptions="Start">
-            <local:SvgView Colour="#ffffff" Path="{DynamicResource BackArrowPath}"
-                           VerticalOptions="Start" HorizontalOptions="Start"
-                           HeightRequest="20" WidthRequest="20">
-                <local:SvgView.GestureRecognizers>
+            <Path Fill="#ffffff" Data="{DynamicResource BackArrowGeometry}"
+                  VerticalOptions="Start" HorizontalOptions="Start"
+                  HeightRequest="20" WidthRequest="20">
+                <Path.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
-                </local:SvgView.GestureRecognizers>
-            </local:SvgView>
-            <local:SvgView Colour="#ffffff" Path="{DynamicResource DotsPath}"
-                           VerticalOptions="Start" HorizontalOptions="End"
-                           HeightRequest="20" WidthRequest="20"/>
+                </Path.GestureRecognizers>
+            </Path>
+            <Path Fill="#ffffff" Data="{DynamicResource DotsGeometry}"
+                  VerticalOptions="Start" HorizontalOptions="End"
+                  HeightRequest="20" WidthRequest="20"/>
 
-            <local:SvgView Colour="#ffffff" Path="{DynamicResource BottlePath}"
-                           VerticalOptions="Start" HorizontalOptions="Start"
-                           HeightRequest="80" WidthRequest="80"
-                           Rotation="90" Margin="25,35,0,0"/>
-            <local:SvgView Colour="#ffffff" Path="{DynamicResource BottlePath}"
-                           VerticalOptions="Start" HorizontalOptions="End"
-                           HeightRequest="100" WidthRequest="100"
-                           Margin="0,40,10,0"/>
+            <Path Fill="#ffffff" Data="{DynamicResource BottleGeometry}"
+                  VerticalOptions="Start" HorizontalOptions="Start"
+                  HeightRequest="80" WidthRequest="80"
+                  Rotation="90" Margin="25,35,0,0"/>
+            <Path Fill="#ffffff" Data="{DynamicResource BottleGeometry}"
+                  VerticalOptions="Start" HorizontalOptions="End"
+                  HeightRequest="100" WidthRequest="100"
+                  Margin="0,40,10,0"/>
         </Grid>
 
         <Grid RowDefinitions="*,35" RowSpacing="0" Grid.Row="1" HorizontalOptions="Center">
             <BoxView BackgroundColor="{Binding Material.WasteProcessingEnum, Converter={StaticResource WasteProcessingToColourConverter}}"
                      CornerRadius="8" HorizontalOptions="Center" WidthRequest="70"/>
-            <local:SvgView Colour="{DynamicResource DarkDetailColour}" Path="{Binding Material.WasteProcessingEnum, Converter={StaticResource WasteProcessingToPathConverter}}"
-                           VerticalOptions="Center" HorizontalOptions="Center"
-                           HeightRequest="30" />
+            <Path Fill="{DynamicResource DarkDetailBrush}" Data="{Binding Material.WasteProcessingEnum, Converter={StaticResource WasteProcessingToPathConverter}}"
+                  VerticalOptions="Center" HorizontalOptions="Center"
+                  HeightRequest="30" />
             <Label Grid.Row="1" Text="{Binding Material.WasteProcessingEnum, Converter={StaticResource WasteProcessingToAdjectiveConverter}}"
                    VerticalOptions="End" HorizontalOptions="Center"
                    FontSize="18" FontFamily="BoldFont" CharacterSpacing="1"/>
@@ -93,8 +93,8 @@
                                              VerticalOptions="Start" Margin="10,0,0,0">
                                     <Label Text="Read More" FontFamily="BoldFont"
                                            VerticalOptions="Center"/>
-                                    <local:SvgView Path="{StaticResource ArrowPath}" Colour="{DynamicResource DarkDetailColour}"
-                                                   VerticalOptions="Center" HeightRequest="10" Margin="0,2,0,0"/>
+                                    <Path Data="{StaticResource ArrowGeometry}" Fill="{DynamicResource DarkDetailBrush}"
+                                          VerticalOptions="Center" HorizontalOptions="Start" WidthRequest="30" HeightRequest="10" Margin="0,2,0,0"/>
                                 </StackLayout>
                             </Grid>
                             <Frame.GestureRecognizers>

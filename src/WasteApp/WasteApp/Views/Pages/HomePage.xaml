@@ -4,7 +4,6 @@
              xmlns:core="clr-namespace:WasteApp.Core;assembly=WasteApp.Core"
              xmlns:local="clr-namespace:WasteApp"
              xmlns:sh="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
-             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              x:Class="WasteApp.HomePage"
              
              Shell.NavBarIsVisible="False"
@@ -20,9 +19,9 @@
                        VerticalOptions="Center" Padding="0">
                     <StackLayout Orientation="Horizontal"
                                  Margin="20,5" Spacing="0">
-                        <local:SvgView Path="{StaticResource MagnifyingGlassPath}" Colour="{DynamicResource DarkDetailColour}"
-                                       VerticalOptions="Center" HorizontalOptions="Start"
-                                       HeightRequest="20" WidthRequest="20" Margin="0,0,3,0"/>
+                        <Path Data="{StaticResource MagnifyingGlassGeometry}" Fill="{DynamicResource DarkDetailBrush}"
+                              VerticalOptions="Center" HorizontalOptions="Start" Aspect="Uniform"
+                              HeightRequest="20" WidthRequest="20" Margin="0,0,3,0"/>
                         <Entry Placeholder="Search for an item" PlaceholderColor="LightGray" FontSize="14" FontFamily="BoldFont" TextColor="{DynamicResource DarkDetailColour}"
                                HorizontalOptions="FillAndExpand" Margin="0,0,0,-2"/>
                     </StackLayout>
@@ -63,9 +62,9 @@
                                         <Frame x:Name="frame" CornerRadius="10" HasShadow="False"
                                                BackgroundColor="{Binding ., Converter={StaticResource WasteProcessingToColourConverter}}"
                                                Padding="0">
-                                            <local:SvgView Colour="{DynamicResource DarkDetailColour}" Path="{Binding ., Converter={StaticResource WasteProcessingToPathConverter}}"
-                                                           IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type core:HomePageViewModel}}, Path=SelectedWasteProcessing, 
-                                                                               Converter={StaticResource SelectionConverter}, ConverterParameter={x:Reference frame}}">
+                                            <Path Fill="{DynamicResource DarkDetailBrush}" Data="{Binding ., Converter={StaticResource WasteProcessingToPathConverter}}"
+                                                  IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type core:HomePageViewModel}}, Path=SelectedWasteProcessing, 
+                                                                      Converter={StaticResource SelectionConverter}, ConverterParameter={x:Reference frame}}">
                                                 <VisualStateManager.VisualStateGroups>
                                                     <VisualStateGroup Name="CommonStates">
                                                         <VisualState Name="Normal">
@@ -84,7 +83,7 @@
                                                         </VisualState>
                                                     </VisualStateGroup>
                                                 </VisualStateManager.VisualStateGroups>
-                                            </local:SvgView>
+                                            </Path>
                                         </Frame>
                                     </sh:Shadows>
 
@@ -191,8 +190,17 @@
             </CollectionView.Footer>
         </CollectionView>
 
-        <skia:SKCanvasView x:Name="gradientCanvasView" Grid.Row="1" PaintSurface="GradientPaintSurface"
-                           VerticalOptions="Start" HeightRequest="20"/>
+        <BoxView Grid.Row="1"
+                 VerticalOptions="Start" HeightRequest="20">
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{DynamicResource BackgroundColour}"
+                          Offset="0.1"/>
+                    <GradientStop Color="#00000000"
+                          Offset="0.9"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
     </Grid>
     
 </ContentPage>

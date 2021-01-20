@@ -17,20 +17,20 @@ namespace WasteApp {
     public partial class CameraPage : global::Xamarin.Forms.ContentPage {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
-        private global::WasteApp.CameraPreview cameraPreview;
+        private global::Xamarin.Forms.Frame scanFrame;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
-        private global::SkiaSharp.Views.Forms.SKCanvasView scanCanvasView;
+        private global::Xamarin.Forms.BoxView boxView;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
-        private global::SkiaSharp.Views.Forms.SKCanvasView cornersCanvasView;
+        private global::Xamarin.Forms.Shapes.Path cornersPath;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private void InitializeComponent() {
             global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml(this, typeof(CameraPage));
-            cameraPreview = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::WasteApp.CameraPreview>(this, "cameraPreview");
-            scanCanvasView = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::SkiaSharp.Views.Forms.SKCanvasView>(this, "scanCanvasView");
-            cornersCanvasView = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::SkiaSharp.Views.Forms.SKCanvasView>(this, "cornersCanvasView");
+            scanFrame = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Frame>(this, "scanFrame");
+            boxView = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.BoxView>(this, "boxView");
+            cornersPath = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Shapes.Path>(this, "cornersPath");
         }
     }
 }

@@ -39,14 +39,14 @@ namespace WasteApp
                 {
                     new PathFigure
                     {
-                        StartPoint = new Point(0,0), IsClosed = true, IsFilled = true, 
+                        StartPoint = new Point(-1,0), IsClosed = true, IsFilled = true, 
                         Segments = new PathSegmentCollection
                         {
-                            new QuadraticBezierSegment(new Point(0, backgroundCornerRadius), new Point(backgroundCornerRadius, backgroundCornerRadius)),
-                            new LineSegment(new Point(Width - backgroundCornerRadius, backgroundCornerRadius)),
-                            new QuadraticBezierSegment(new Point(Width, backgroundCornerRadius), new Point(Width, 0)),
-                            new LineSegment(new Point(Width, Height)),
-                            new LineSegment(new Point(0, Height))
+                            new QuadraticBezierSegment(new Point(-1, backgroundCornerRadius), new Point(backgroundCornerRadius, backgroundCornerRadius)),
+                            new LineSegment(new Point(Width - backgroundCornerRadius + 1, backgroundCornerRadius)),
+                            new QuadraticBezierSegment(new Point(Width + 1, backgroundCornerRadius), new Point(Width + 1, 0)),
+                            new LineSegment(new Point(Width + 1, Height)),
+                            new LineSegment(new Point(-1, Height))
                         }
                     }
                 }

@@ -1,18 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "/SkWuMQCdAPjEEpbBnd6yKFhO04Uka5GsmHxllLIvXAQ35I6uZq/hvnwRswgS3zE+5tO3xMbb7oQ+XVIb2S7hw==",
+  "dgSpecHash": "F6ezrBG+JWU7j1x5whseJLjiBS/DQJfDH1N56BPE+Ir/Shj1i/AscUnBEoID+ZNPcwE0/IxzGgjj/lFiaE6fAw==",
   "success": true,
   "projectFilePath": "D:\\git\\RadekVyM\\Waste-App\\src\\WasteApp\\WasteApp.iOS\\WasteApp.iOS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\radec\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\3.1.9\\microsoft.extensions.dependencyinjection.3.1.9.nupkg.sha512",
-    "C:\\Users\\radec\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\3.1.9\\microsoft.extensions.dependencyinjection.abstractions.3.1.9.nupkg.sha512",
+    "C:\\Users\\radec\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\5.0.1\\microsoft.extensions.dependencyinjection.5.0.1.nupkg.sha512",
+    "C:\\Users\\radec\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\radec\\.nuget\\packages\\sharpnado.shadows\\1.2.0\\sharpnado.shadows.1.2.0.nupkg.sha512",
-    "C:\\Users\\radec\\.nuget\\packages\\skiasharp\\2.80.2\\skiasharp.2.80.2.nupkg.sha512",
-    "C:\\Users\\radec\\.nuget\\packages\\skiasharp.views\\2.80.2\\skiasharp.views.2.80.2.nupkg.sha512",
-    "C:\\Users\\radec\\.nuget\\packages\\skiasharp.views.forms\\2.80.2\\skiasharp.views.forms.2.80.2.nupkg.sha512",
+    "C:\\Users\\radec\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\radec\\.nuget\\packages\\thomaslevesque.weakevent\\4.1.0\\thomaslevesque.weakevent.4.1.0.nupkg.sha512",
-    "C:\\Users\\radec\\.nuget\\packages\\xamarin.essentials\\1.5.3.2\\xamarin.essentials.1.5.3.2.nupkg.sha512",
-    "C:\\Users\\radec\\.nuget\\packages\\xamarin.forms\\4.8.0.1560\\xamarin.forms.4.8.0.1560.nupkg.sha512"
+    "C:\\Users\\radec\\.nuget\\packages\\xamarin.communitytoolkit\\1.0.1\\xamarin.communitytoolkit.1.0.1.nupkg.sha512",
+    "C:\\Users\\radec\\.nuget\\packages\\xamarin.essentials\\1.6.0\\xamarin.essentials.1.6.0.nupkg.sha512",
+    "C:\\Users\\radec\\.nuget\\packages\\xamarin.forms\\5.0.0.1905\\xamarin.forms.5.0.0.1905.nupkg.sha512"
   ],
   "logs": []
 }

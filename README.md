@@ -21,7 +21,7 @@ Feel free to take this code and do what you will, but please make sure you ackno
 
 [Xamarin.Essentials](https://www.nuget.org/packages/Xamarin.Essentials)
 
-[SkiaSharp.Views.Forms](https://www.nuget.org/packages/SkiaSharp.Views.Forms)
+[Xamarin.CommunityToolkit](https://www.nuget.org/packages/Xamarin.CommunityToolkit/)
 
 [Sharpnado.Shadows](https://www.nuget.org/packages/Sharpnado.Shadows/)
 

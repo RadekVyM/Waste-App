@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell;
 using WasteApp.Core;
+using CommunityToolkit.Maui;
 using Browser = WasteApp.Maui.Services.Browser;
 
 namespace WasteApp.Maui;
@@ -19,6 +20,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkitCamera()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("MADE Tommy Soft Regular.otf", "Regular");

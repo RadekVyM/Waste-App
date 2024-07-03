@@ -79,20 +79,20 @@ public partial class TabBar : Grid
         new()
         {
             Figures =
-                [
-                    new PathFigure
-                    {
-                        StartPoint = new Point(-1, 0), IsClosed = true, IsFilled = true,
-                        Segments =
-                        [
-                            new QuadraticBezierSegment(new Point(-1, CornerRadius), new Point(CornerRadius, CornerRadius)),
-                            new LineSegment(new Point(Width - CornerRadius + 1, CornerRadius)),
-                            new QuadraticBezierSegment(new Point(Width + 1, CornerRadius), new Point(Width + 1, 0)),
-                            new LineSegment(new Point(Width + 1, Height)),
-                            new LineSegment(new Point(-1, Height))
-                        ]
-                    }
-                ]
+            [
+                new PathFigure
+                {
+                    StartPoint = new Point(-1, 0), IsClosed = true, IsFilled = true,
+                    Segments =
+                    [
+                        new QuadraticBezierSegment(new Point(-1, CornerRadius), new Point(CornerRadius, CornerRadius)),
+                        new LineSegment(new Point(Width - CornerRadius + 1, CornerRadius)),
+                        new QuadraticBezierSegment(new Point(Width + 1, CornerRadius), new Point(Width + 1, 0)),
+                        new LineSegment(new Point(Width + 1, Height)),
+                        new LineSegment(new Point(-1, Height))
+                    ]
+                }
+            ]
         };
 }
 

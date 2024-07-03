@@ -1,35 +1,40 @@
-﻿using System.Linq;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using WasteApp.Core.Interfaces.Services;
+using WasteApp.Core.Interfaces.ViewModels;
+using WasteApp.Core.Models;
 
-namespace WasteApp.Core
+namespace WasteApp.Core.ViewModels;
+
+public class MaterialDetailPageViewModel : BasePageViewModel, IMaterialDetailPageViewModel
 {
-    public class MaterialDetailPageViewModel : BasePageViewModel, IMaterialDetailPageViewModel
+    Material? material;
+
+    public Material? Material
     {
-        Material material;
-
-        public Material Material
+        get => material;
+        set
         {
-            get => material;
-            set
-            {
-                material = value;
-                OnPropertyChanged(nameof(Material));
-            }
+            material = value;
+            OnPropertyChanged(nameof(Material));
         }
+    }
 
-        public ICommand LinkCommand { get; private set; }
+    public ICommand LinkCommand { get; private init; }
 
-        public MaterialDetailPageViewModel(INavigationService navigationService, IBrowser browser) : base(navigationService)
+    public MaterialDetailPageViewModel(IBrowser browser)
+    {
+        LinkCommand = new RelayCommand(async parameter => 
         {
-            LinkCommand = new RelayCommand(async parameter => 
-            {
-                await browser.OpenAsync(parameter.ToString());
-            });
-        }
+            if (parameter?.ToString() is string uri)
+                await browser.OpenAsync(uri);
+        });
+    }
 
-        public override void OnPagePushing(params object[] parameters)
-        {
-            Material = parameters.FirstOrDefault() as Material;
-        }
+    public override void OnApplyFirstParameters(IParameters parameters)
+    {
+        if (parameters is not MaterialDetailPageParameters materialDetailPageParameters)
+            throw new Exception("Wrong parameters have been sent to the ViewModel.");
+
+        Material = materialDetailPageParameters.Material;
     }
 }

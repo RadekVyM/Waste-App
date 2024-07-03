@@ -1,7 +1,6 @@
-﻿namespace WasteApp.Core
+﻿namespace WasteApp.Core.Models;
+
+public enum MaterialEnum
 {
-    public enum MaterialEnum
-    {
-        Paper, Plastic, Glass, Aluminium
-    }
+    Paper, Plastic, Glass, Aluminium
 }

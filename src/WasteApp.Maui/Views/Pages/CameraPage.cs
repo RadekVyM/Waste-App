@@ -7,12 +7,12 @@ namespace WasteApp.Maui.Views.Pages;
 
 public class CameraPage : BaseContentPage
 {
-    ICameraPageViewModel ViewModel => BindingContext as ICameraPageViewModel;
+    CameraPageViewModel ViewModel => BindingContext as CameraPageViewModel;
 
     CameraView cameraView;
 
 
-    public CameraPage(ICameraPageViewModel viewModel, INavigationService navigationService) : base(navigationService)
+    public CameraPage(CameraPageViewModel viewModel, INavigationService navigationService) : base(navigationService)
     {
         BindingContext = viewModel;
 
@@ -37,6 +37,8 @@ public class CameraPage : BaseContentPage
                         .Assign(out Button detailButton)
                     ])
             ]);
+
+        this.Background(Colors.Black);
 
         backButton.Clicked += (s, e) => navigationService.GoBack();
         detailButton.Clicked += async (s, e) => await navigationService.GoTo(PageType.MaterialDetailPage, new MaterialDetailPageParameters(null));

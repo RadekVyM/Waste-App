@@ -9,17 +9,17 @@ public class ItemsService : IItemsService
             new Item
             {
                 Name = "Glass Bottle",
-                Image = "glassBottle.png"
+                Image = "glass_bottle.png"
             },
             new Item
             {
                 Name = "Coffee Cup",
-                Image = "coffeeCup.png"
+                Image = "coffee_cup.png"
             },
             new Item
             {
                 Name = "Plastic Bottle",
-                Image = "petBottle.png"
+                Image = "pet_bottle.png"
             }
         ];
 }

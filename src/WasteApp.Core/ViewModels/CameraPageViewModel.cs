@@ -1,11 +1,10 @@
 ﻿using System.Windows.Input;
 using WasteApp.Core.Interfaces.Services;
-using WasteApp.Core.Interfaces.ViewModels;
 using WasteApp.Core.Models;
 
 namespace WasteApp.Core.ViewModels;
 
-public class CameraPageViewModel : BasePageViewModel, ICameraPageViewModel
+public class CameraPageViewModel : BasePageViewModel
 {
     Material? foundMaterial;
 

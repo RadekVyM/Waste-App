@@ -15,7 +15,7 @@
 		<ApplicationTitle>WasteApp.Maui</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.betapp.maui</ApplicationId>
+		<ApplicationId>com.companyname.wasteapp.maui</ApplicationId>
 		<ApplicationIdGuid>da7453c8-73dc-488c-93a6-c24f81008f50</ApplicationIdGuid>
 
 		<!-- Versions -->

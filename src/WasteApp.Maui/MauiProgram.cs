@@ -1,5 +1,4 @@
 ﻿using WasteApp.Core.Interfaces.Services;
-using WasteApp.Core.Interfaces.ViewModels;
 using WasteApp.Core.Services;
 using WasteApp.Core.ViewModels;
 using WasteApp.Maui.Services;
@@ -10,6 +9,8 @@ using SimpleToolkit.SimpleShell;
 using WasteApp.Core;
 using CommunityToolkit.Maui;
 using Browser = WasteApp.Maui.Services.Browser;
+using Microsoft.Maui.Handlers;
+using CommunityToolkit.Maui.Views;
 
 namespace WasteApp.Maui;
 
@@ -25,7 +26,8 @@ public static class MauiProgram
             {
                 fonts.AddFont("MADE Tommy Soft Regular.otf", "Regular");
                 fonts.AddFont("MADE Tommy Soft Medium.otf", "Medium");
-            });
+            })
+            .ConfigureMauiHandlers((IMauiHandlersCollection h) => h.AddHandler<CameraView, CustomCameraViewHandler>());
 
         builder.UseSimpleShell();
         builder.UseSimpleToolkit();
@@ -33,6 +35,22 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+
+        EntryHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, entry) =>
+        {
+#if ANDROID
+            handler.PlatformView.Background = null;
+            handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+#elif IOS || MACCATALYST
+            handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
+            handler.PlatformView.Layer.BorderWidth = 0;
+            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#elif WINDOWS
+            handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+            handler.PlatformView.Background = null;
+            handler.PlatformView.FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+        });
 
 #if IOS || ANDROID
         builder.DisplayContentBehindBars();
@@ -53,9 +71,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<IMaterialsService, MaterialsService>();
         builder.Services.AddSingleton<WasteApp.Core.Interfaces.Services.IBrowser, Browser>();
 
-        builder.Services.AddTransient<IHomePageViewModel, HomePageViewModel>();
-        builder.Services.AddTransient<ICameraPageViewModel, CameraPageViewModel>();
-        builder.Services.AddTransient<IMaterialDetailPageViewModel, MaterialDetailPageViewModel>();
+        builder.Services.AddTransient<HomePageViewModel>();
+        builder.Services.AddTransient<CameraPageViewModel>();
+        builder.Services.AddTransient<MaterialDetailPageViewModel>();
 
         return builder.Build();
     }

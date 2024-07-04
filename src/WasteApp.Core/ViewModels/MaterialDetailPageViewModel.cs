@@ -5,7 +5,7 @@ using WasteApp.Core.Models;
 
 namespace WasteApp.Core.ViewModels;
 
-public class MaterialDetailPageViewModel : BasePageViewModel, IMaterialDetailPageViewModel
+public class MaterialDetailPageViewModel : BasePageViewModel
 {
     Material? material;
 

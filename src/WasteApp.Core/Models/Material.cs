@@ -9,4 +9,5 @@ public class Material
     public required string ShortDescription { get; set; }
     public required string Image { get; set; }
     public required Link[] Links { get; set; }
+    public required string[] Facts { get; set; }
 }

@@ -4,8 +4,8 @@ namespace WasteApp.Maui.Services;
 
 public class Browser : IBrowser
 {
-    public Task OpenAsync(string uri)
+    public async Task OpenAsync(string uri)
     {
-        throw new NotImplementedException();
+        await Microsoft.Maui.ApplicationModel.Browser.Default.OpenAsync(uri);
     }
 }

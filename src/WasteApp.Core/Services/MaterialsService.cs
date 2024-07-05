@@ -28,7 +28,7 @@ public class MaterialsService : IMaterialsService
                     {
                         Description = "Effects of plastic on human body",
                         Image = PlasticImage1,
-                        URL = "https://repurpose.global/letstalktrash/harmful-effects-of-plastic-pollution-on-human-health/"
+                        URL = "https://www.earthday.org/what-you-need-to-know-about-the-impact-of-plastics-on-human-health/"
                     },
                     new Link
                     {
@@ -36,7 +36,15 @@ public class MaterialsService : IMaterialsService
                         Image = PlasticImage2,
                         URL = "https://www.nationalgeographic.com/environment/2019/07/exposed-to-extreme-heat-plastic-bottles-may-become-unsafe-over-time/"
                     }
-                ]
+                ],
+                Facts =
+                [
+                    "Only 9% of all plastic produced is recycled.",
+                    "A whopping 2 million plastic bags are used every minute worldwide.",
+                    "Single-use plastics are illegal in some parts of the world.",
+                    "Every minute of every day a truckload of plastic is dumped into the ocean.",
+                    "73% of beach litter worldwide is plastic.",
+                ],
             },
             new Material
             {
@@ -52,7 +60,7 @@ public class MaterialsService : IMaterialsService
                     {
                         Description = "Effects of plastic on human body",
                         Image = PlasticImage1,
-                        URL = "https://repurpose.global/letstalktrash/harmful-effects-of-plastic-pollution-on-human-health/"
+                        URL = "https://www.earthday.org/what-you-need-to-know-about-the-impact-of-plastics-on-human-health/"
                     },
                     new Link
                     {
@@ -60,7 +68,15 @@ public class MaterialsService : IMaterialsService
                         Image = PlasticImage2,
                         URL = "https://www.nationalgeographic.com/environment/2019/07/exposed-to-extreme-heat-plastic-bottles-may-become-unsafe-over-time/"
                     }
-                ]
+                ],
+                Facts =
+                [
+                    "Only 9% of all plastic produced is recycled.",
+                    "A whopping 2 million plastic bags are used every minute worldwide.",
+                    "Single-use plastics are illegal in some parts of the world.",
+                    "Every minute of every day a truckload of plastic is dumped into the ocean.",
+                    "73% of beach litter worldwide is plastic.",
+                ],
             },
             new Material
             {
@@ -76,7 +92,7 @@ public class MaterialsService : IMaterialsService
                     {
                         Description = "Effects of plastic on human body",
                         Image = PlasticImage1,
-                        URL = "https://repurpose.global/letstalktrash/harmful-effects-of-plastic-pollution-on-human-health/"
+                        URL = "https://www.earthday.org/what-you-need-to-know-about-the-impact-of-plastics-on-human-health/"
                     },
                     new Link
                     {
@@ -84,7 +100,15 @@ public class MaterialsService : IMaterialsService
                         Image = PlasticImage2,
                         URL = "https://www.nationalgeographic.com/environment/2019/07/exposed-to-extreme-heat-plastic-bottles-may-become-unsafe-over-time/"
                     }
-                ]
+                ],
+                Facts =
+                [
+                    "Only 9% of all plastic produced is recycled.",
+                    "A whopping 2 million plastic bags are used every minute worldwide.",
+                    "Single-use plastics are illegal in some parts of the world.",
+                    "Every minute of every day a truckload of plastic is dumped into the ocean.",
+                    "73% of beach litter worldwide is plastic.",
+                ],
             },
             new Material
             {
@@ -100,7 +124,7 @@ public class MaterialsService : IMaterialsService
                     {
                         Description = "Effects of plastic on human body",
                         Image = PlasticImage1,
-                        URL = "https://repurpose.global/letstalktrash/harmful-effects-of-plastic-pollution-on-human-health/"
+                        URL = "https://www.earthday.org/what-you-need-to-know-about-the-impact-of-plastics-on-human-health/"
                     },
                     new Link
                     {
@@ -108,7 +132,15 @@ public class MaterialsService : IMaterialsService
                         Image = PlasticImage2,
                         URL = "https://www.nationalgeographic.com/environment/2019/07/exposed-to-extreme-heat-plastic-bottles-may-become-unsafe-over-time/"
                     }
-                ]
+                ],
+                Facts =
+                [
+                    "Only 9% of all plastic produced is recycled.",
+                    "A whopping 2 million plastic bags are used every minute worldwide.",
+                    "Single-use plastics are illegal in some parts of the world.",
+                    "Every minute of every day a truckload of plastic is dumped into the ocean.",
+                    "73% of beach litter worldwide is plastic.",
+                ],
             }
         ];
     }

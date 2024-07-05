@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿using Maui.BindableProperty.Generator.Core;
+using Microsoft.Maui.Controls.Shapes;
 using SimpleToolkit.Core;
 using WasteApp.Core.Extensions;
 using WasteApp.Core.Interfaces.Services;
@@ -11,18 +12,16 @@ namespace WasteApp.Maui.Views.Pages;
 
 public class MaterialDetailPage : BaseContentPage
 {
-    readonly PathGeometryConverter pathGeometryConverter = new();
+    const double SidePadding = 25;
 
-    Border header;
-    VerticalStackLayout contentStack;
+    Header header;
+    ScrollView scrollView;
 
     MaterialDetailPageViewModel ViewModel => BindingContext as MaterialDetailPageViewModel;
 
 
     public MaterialDetailPage(MaterialDetailPageViewModel viewModel, INavigationService navigationService) : base(navigationService)
     {
-        Shell.SetPresentationMode(this, PresentationMode.Animated);
-
         BindingContext = viewModel;
 
         Content = new Grid
@@ -30,51 +29,346 @@ public class MaterialDetailPage : BaseContentPage
             RowDefinitions = Rows.Define(Auto, Star),
             Children =
             {
-                RenderHeader()
-                    .Assign(out header),
-                RenderMaterialCard()
-                    .Bottom()
-                    .CenterHorizontal()
-                    .TranslationY(25),
-                new VerticalStackLayout()
-                    .Assign(out contentStack)
-                    .Row(1)
-                    .Children([
-                        new StyledLabel
-                        {
-                            CharacterSpacing = 1
-                        }
-                            .CenterHorizontal()
-                            .Margins(top: 35)
-                            .Font("Medium", 20)
-                            .TextColor(Themes.OnSurface)
-                            .Bind(
-                                StyledLabel.TextProperty,
-                                source: ViewModel,
-                                getter: (MaterialDetailPageViewModel vm) => vm.Material,
-                                convert: (Material material) => material.WasteProcessingEnum.ToAdjective()),
+                new ScrollView()
+                    .Assign(out scrollView)
+                    .RowSpan(2)
+                    .Content(new VerticalStackLayout()
+                        .Paddings(top: Header.HeaderHeight, bottom: 10)
+                        .Children([
                             new StyledLabel
                             {
-                                LineHeight = 1.4
+                                CharacterSpacing = 1
                             }
-                                .Margins(25, 35, 25)
-                                .FontSize(18)
+                                .CenterHorizontal()
+                                .Margins(top: 35)
+                                .Font("Medium", 20)
                                 .TextColor(Themes.OnSurface)
                                 .Bind(
                                     StyledLabel.TextProperty,
                                     source: ViewModel,
                                     getter: (MaterialDetailPageViewModel vm) => vm.Material,
-                                    convert: (Material material) => material.Description)
-                    ])
+                                    convert: (Material material) => material.WasteProcessingEnum.ToAdjective()),
+                            new StyledLabel
+                            {
+                                LineHeight = 1.4
+                            }
+                                .Margin(new Thickness(SidePadding, 35, SidePadding, 30))
+                                .FontSize(16)
+                                .TextColor(Themes.OnSurface)
+                                .Bind(
+                                    StyledLabel.TextProperty,
+                                    source: ViewModel,
+                                    getter: (MaterialDetailPageViewModel vm) => vm.Material,
+                                    convert: (Material material) => material.Description),
+                            RenderMaterialLinks(),
+                            RenderFacts()
+                                .Margin(SidePadding, 30)
+                        ])),
+                new Header(navigationService)
+                    .Assign(out header),
             }
         };
+
+        scrollView.Scrolled += (s, e) => header.ScrollPosition = e.ScrollY;
     }
 
 
     protected override void OnSafeAreaChanged(Thickness safeArea)
     {
-        header.Padding(new Thickness(safeArea.Left, safeArea.Top, safeArea.Right, 0));
-        contentStack.Padding(new Thickness(safeArea.Left, 0, safeArea.Right, safeArea.Bottom + Controls.TabBar.TabBarHeight));
+        header.InnerPadding = new Thickness(safeArea.Left, safeArea.Top, safeArea.Right, 0);
+        scrollView.Padding(new Thickness(safeArea.Left, 0, safeArea.Right, 0));
+        scrollView.Margin(new Thickness(0, safeArea.Top, 0, safeArea.Bottom + Controls.TabBar.TabBarHeight));
+    }
+
+    VerticalStackLayout RenderMaterialLinks()
+    {
+        return new VerticalStackLayout()
+            .Bind(BindableLayout.ItemsSourceProperty, source: ViewModel, getter: (MaterialDetailPageViewModel vm) => vm.Material, convert: (Material material) => material.Links)
+            .ItemTemplate(new DataTemplate(RenderMaterialLinkCard));
+    }
+
+    StyledContentButton RenderMaterialLinkCard()
+    {
+        const double imageSize = 100;
+        var button = new StyledContentButton
+        {
+            StrokeShape = Shapes.RoundedLarge,
+            Shadow = Shadows.Large
+        }
+            .Margin(SidePadding, 8)
+            .Size(-1, imageSize)
+            .Background(Themes.SurfaceContainer)
+            .Bind(StyledContentButton.CommandProperty, source: ViewModel, getter: (MaterialDetailPageViewModel vm) => vm.LinkCommand)
+            .Bind(StyledContentButton.CommandParameterProperty, getter: (Link link) => link.URL)
+            .Content(new Grid
+            {
+                ColumnDefinitions = Columns.Define(imageSize, Star),
+            }
+                .Children([
+                    new Border
+                    {
+                        StrokeThickness = 0,
+                        StrokeShape = Shapes.RoundedLarge,
+                    }
+                        .Content(new Image
+                        {
+                            Aspect = Aspect.AspectFill
+                        }
+                            .Bind(Image.SourceProperty, getter: (Link link) => link.Image)
+                            .Size(imageSize)),
+                    new VerticalStackLayout
+                    {
+                        Spacing = 10
+                    }
+                        .Padding(15)
+                        .Column(1)
+                        .CenterVertical()
+                        .Children([
+                            new StyledLabel()
+                                .Bind(Label.TextProperty, getter: (Link link) => link.Description),
+                            new HorizontalStackLayout
+                            {
+                                Spacing = 5
+                            }
+                                .Children([
+                                    new StyledLabel()
+                                        .Text("Read More")
+                                        .Font("Medium")
+                                        .TextColor(Themes.OnSurfaceContainer)
+                                        .Center(),
+                                    new Icon()
+                                        .Source("arrow_right.png")
+                                        .TintColor(Themes.OnSurfaceContainer)
+                                        .Size(15, 8)
+                                        .Center()
+                                ])
+                        ])
+                ]));
+
+        return button;
+    }
+
+    VerticalStackLayout RenderFacts()
+    {
+        return new VerticalStackLayout
+        {
+            Spacing = 20
+        }
+            .Bind(BindableLayout.ItemsSourceProperty, source: ViewModel, getter: (MaterialDetailPageViewModel vm) => vm.Material, convert: (Material material) => material.Facts)
+            .ItemTemplate(new DataTemplate(RenderFact));
+    }
+
+    Grid RenderFact()
+    {
+        const double pointSize = 5;
+
+        return new Grid
+        {
+            ColumnDefinitions = Columns.Define(pointSize, Star),
+            ColumnSpacing = 10
+        }
+            .Children([
+                new Ellipse
+                {
+                    StrokeThickness = 0,
+                }
+#if IOS || MACCATALYST
+                    .Margins(top: 14.5)
+#else
+                    .Margins(top: 6.5)
+#endif
+                    .Fill(Themes.OnSurface)
+                    .Size(pointSize)
+                    .Top(),
+                new StyledLabel
+                {
+                    LineHeight = 1.4
+                }
+                    .Column(1)
+                    .Bind(Label.TextProperty)
+                    .TextColor(Themes.OnSurface)
+                    .FontSize(16)
+            ]);
+    }
+}
+
+partial class Header : Grid
+{
+    public const double HeaderHeight = 200;
+    const double TopButtonsAreaHeight = 44;
+    const double TitleHeight = TopButtonsAreaHeight;
+    const double CollapsedBackgroundOverlap = 40;
+    const double LeftBottlePosition = 50;
+    const double RightBottlePosition = 42;
+    const double LeftBottleSize = 80;
+    const double RightBottleSize = 95;
+    double DefaultTitleTranslation => (HeaderHeight - TitleHeight) / 2;
+    double CollapsedTitleTranslation => (TopButtonsAreaHeight - TitleHeight) / 2;
+    double DefaultMaterialCardTranslation => HeaderHeight - 30;
+    double CollapsedMaterialCardTranslation => TopButtonsAreaHeight + CollapsedBackgroundOverlap - 30;
+
+    [AutoBindable]
+    readonly Thickness innerPadding;
+    [AutoBindable(DefaultValue = "0d")]
+    readonly double scrollPosition;
+
+    readonly PathGeometryConverter pathGeometryConverter = new();
+    readonly INavigationService navigationService;
+    Grid innerGrid;
+    RoundRectangle backgroundRect;
+    Border materialCard;
+    StyledLabel title;
+    Path leftBottle;
+    Path rightBottle;
+
+
+    public Header(INavigationService navigationService) : base()
+    {
+        // TODO: The input transparency is still weird
+
+        this.navigationService = navigationService;
+        
+#if IOS || MACCATALYST
+        InputTransparent = true;
+        CascadeInputTransparent = false;
+#endif
+
+        Add(new RoundRectangle
+        {
+            StrokeThickness = 0,
+            CornerRadius = new CornerRadius(0, 0, 50, 50)
+        }
+            .Assign(out backgroundRect)
+#if IOS || MACCATALYST
+            .InputTransparent(true)
+#endif
+            .Margin(-1)
+            .Fill(Themes.Primary));
+        Add(new Grid
+        {
+            CascadeInputTransparent = false
+        }
+            .Size(-1, HeaderHeight)
+            .Assign(out innerGrid)
+#if IOS || MACCATALYST
+            .InputTransparent(true)
+#endif
+            .Children([
+                new Path
+                {
+                    Data = CreateBottleGeometry(),
+                    Aspect = Stretch.Uniform,
+                }
+                    .Assign(out leftBottle)
+#if IOS || MACCATALYST
+                    .InputTransparent(true)
+#endif
+                    .Start()
+                    .Top()
+                    .TranslationX(45)
+                    .TranslationY(LeftBottlePosition)
+                    .Size(LeftBottleSize)
+                    .Rotation(80)
+                    .Fill(Themes.OnPrimary),
+                new Path
+                {
+                    Data = CreateBottleGeometry(),
+                    Aspect = Stretch.Uniform,
+                }
+                    .Assign(out rightBottle)
+#if IOS || MACCATALYST
+                    .InputTransparent(true)
+#endif
+                    .End()
+                    .Top()
+                    .TranslationX(-44)
+                    .TranslationY(RightBottlePosition)
+                    .Size(RightBottleSize)
+                    .Fill(Themes.OnPrimary),
+                new StyledLabel
+                {
+                    CharacterSpacing = 1
+                }
+                    .Assign(out title)
+#if IOS || MACCATALYST
+                    .InputTransparent(true)
+#endif
+                    .Bind(Label.TextProperty, getter: (MaterialDetailPageViewModel vm) => vm.Material, convert: (Material material) => material.Name)
+                    .CenterHorizontal()
+                    .Top()
+                    .Size(-1, TitleHeight)
+                    .TranslationY(DefaultTitleTranslation)
+                    .TextCenterVertical()
+                    .Font("Medium", size: 30)
+                    .TextColor(Themes.OnPrimary),
+                RenderMaterialCard()
+                    .Assign(out materialCard)
+#if IOS || MACCATALYST
+                    .InputTransparent(true)
+#endif
+                    .Top()
+                    .CenterHorizontal()
+                    .TranslationY(DefaultMaterialCardTranslation),
+                ..RenderTopBarButtons()
+            ]));
+
+        OnScrollPositionChanged(0);
+    }
+
+
+    partial void OnInnerPaddingChanged(Thickness value)
+    {
+        innerGrid.Margin(value);
+    }
+
+    partial void OnScrollPositionChanged(double value)
+    {
+        value = Math.Max(0, value);
+
+        var collapsedHeight = HeaderHeight - TopButtonsAreaHeight - CollapsedBackgroundOverlap;
+        var position = Math.Min(value, collapsedHeight) / collapsedHeight;
+        backgroundRect.TranslationY(-collapsedHeight * position);
+        materialCard.TranslationY(Interpolate(DefaultMaterialCardTranslation, CollapsedMaterialCardTranslation, position));
+        title.TranslationY(Interpolate(DefaultTitleTranslation, CollapsedTitleTranslation, position));
+        
+        var bottlesHeight = Math.Max(HeaderHeight - LeftBottlePosition - LeftBottleSize, HeaderHeight - RightBottlePosition - RightBottleSize) - 20;
+        var bottlesPosition = Math.Min(value, bottlesHeight) / bottlesHeight;
+
+        leftBottle.Opacity(1 - bottlesPosition);
+        rightBottle.Opacity(1 - bottlesPosition);
+
+        leftBottle.TranslationY(Interpolate(LeftBottlePosition, LeftBottlePosition - 10, bottlesPosition));
+        rightBottle.TranslationY(Interpolate(RightBottlePosition, RightBottlePosition - 10, bottlesPosition));
+    }
+
+    static double Interpolate(double initial, double target, double position) =>
+        initial + (target - initial) * position;
+
+    StyledContentButton[] RenderTopBarButtons()
+    {
+        StyledContentButton[] buttons = [
+            TopButton("left_arrow_icon.png", 20)
+                .Assign(out ContentButton backButton)
+                .Start()
+                .Top(),
+            TopButton("ellipsis.png", 30)
+                .End()
+                .Top()
+        ];
+
+        backButton.Clicked += (s, e) => navigationService.GoBack();
+
+        return buttons;
+
+        static StyledContentButton TopButton(string icon, double iconWidth) =>
+            new StyledContentButton()
+                .InputTransparent(false)
+                .Padding(10)
+                .Margin(15, 2)
+                .Content(new Icon()
+                    .Source(icon)
+                    .TintColor(Themes.OnPrimary)
+                    .Size(iconWidth, 20));
     }
 
     Border RenderMaterialCard()
@@ -87,88 +381,16 @@ public class MaterialDetailPage : BaseContentPage
             .Background(Colors.Red)
             .Bind(
                 Border.BackgroundProperty,
-                source: ViewModel,
                 getter: (MaterialDetailPageViewModel vm) => vm.Material,
                 convert: (Material material) => Color.FromArgb(material.WasteProcessingEnum.ToColor()))
             .Size(80, 55)
             .Content(new Icon()
                 .Bind(
                     Icon.SourceProperty,
-                    source: ViewModel,
                     getter: (MaterialDetailPageViewModel vm) => vm.Material,
                     convert: (Material material) => material.WasteProcessingEnum.ToIcon())
                 .Size(25)
                 .TintColor(Themes.Primary));
-    }
-
-    Border RenderHeader()
-    {
-        var border = new Border
-        {
-            StrokeThickness = 0,
-            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(0, 0, 50, 50) }
-        }
-            .Margin(-1)
-            .Background(Themes.Primary)
-            .Content(new Grid()
-                .Size(-1, 200)
-                .Children([
-                    new Path
-                    {
-                        Data = CreateBottleGeometry(),
-                        Aspect = Stretch.Uniform,
-#if ANDROID
-                        AnchorX = 0,
-                        AnchorY = 0,
-#endif
-                    }
-                        .Start()
-                        .Top()
-                        .Size(80)
-                        .Rotation(80)
-                        .Margins(45, 42, 0, 0)
-                        .Fill(Themes.OnPrimary),
-                    new Path
-                    {
-                        Data = CreateBottleGeometry(),
-                        Aspect = Stretch.Uniform
-                    }
-                        .End()
-                        .Top()
-                        .Size(95)
-                        .Margins(0, 50, 35, 0)
-                        .Fill(Themes.OnPrimary),
-                    new StyledLabel
-                    {
-                        CharacterSpacing = 1
-                    }
-                        .Bind(Label.TextProperty, source: ViewModel, getter: (MaterialDetailPageViewModel vm) => vm.Material, convert: (Material material) => material.Name)
-                        .CenterHorizontal()
-                        .Bottom()
-                        .Margins(bottom: 70)
-                        .Font("Medium", size: 30)
-                        .TextColor(Themes.OnPrimary),
-                    TopButton("left_arrow_icon.png", 20)
-                        .Assign(out ContentButton backButton)
-                        .Start()
-                        .Top(),
-                    TopButton("ellipsis.png", 30)
-                        .End()
-                        .Top()
-                ]));
-
-        backButton.Clicked += (s, e) => navigationService.GoBack();
-
-        return border;
-
-        StyledContentButton TopButton(string icon, double iconWidth) =>
-            new StyledContentButton()
-                .Padding(10)
-                .Margin(15, 2)
-                .Content(new Icon()
-                    .Source(icon)
-                    .TintColor(Themes.OnPrimary)
-                    .Size(iconWidth, 20));
     }
 
     Geometry CreateBottleGeometry()

@@ -14,7 +14,7 @@ public class HomePage : BaseRootContentPage
 
     HomePageViewModel ViewModel => BindingContext as HomePageViewModel;
 
-    ContentView footerView;
+    readonly ContentView footerView;
 
 
     public HomePage(HomePageViewModel viewModel, INavigationService navigationService) : base(navigationService)

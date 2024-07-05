@@ -14,8 +14,8 @@ public class MaterialDetailPage : BaseContentPage
 {
     const double SidePadding = 25;
 
-    Header header;
-    ScrollView scrollView;
+    readonly Header header;
+    readonly ScrollView scrollView;
 
     MaterialDetailPageViewModel ViewModel => BindingContext as MaterialDetailPageViewModel;
 
@@ -309,7 +309,8 @@ partial class Header : Grid
                     .Top()
                     .CenterHorizontal()
                     .TranslationY(DefaultMaterialCardTranslation),
-                ..RenderTopBarButtons()
+                new AppBar(navigationService, true, false)
+                    .Top()
             ]));
 
         OnScrollPositionChanged(0);
@@ -343,33 +344,6 @@ partial class Header : Grid
 
     static double Interpolate(double initial, double target, double position) =>
         initial + (target - initial) * position;
-
-    StyledContentButton[] RenderTopBarButtons()
-    {
-        StyledContentButton[] buttons = [
-            TopButton("left_arrow_icon.png", 20)
-                .Assign(out ContentButton backButton)
-                .Start()
-                .Top(),
-            TopButton("ellipsis.png", 30)
-                .End()
-                .Top()
-        ];
-
-        backButton.Clicked += (s, e) => navigationService.GoBack();
-
-        return buttons;
-
-        static StyledContentButton TopButton(string icon, double iconWidth) =>
-            new StyledContentButton()
-                .InputTransparent(false)
-                .Padding(10)
-                .Margin(15, 2)
-                .Content(new Icon()
-                    .Source(icon)
-                    .TintColor(Themes.OnPrimary)
-                    .Size(iconWidth, 20));
-    }
 
     Border RenderMaterialCard()
     {

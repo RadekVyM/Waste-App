@@ -3,16 +3,15 @@ using WasteApp.Maui.Views.Pages;
 using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell;
 using TabBar = WasteApp.Maui.Views.Controls.TabBar;
-using Maui.BindableProperty.Generator.Core;
 using ShellItem = Microsoft.Maui.Controls.ShellItem;
 
 namespace WasteApp.Maui;
 
 public partial class AppShell : SimpleShell
 {
-    const string TabBarAnimation = "TabBarAnimation";
+    const string TabBarAnimationKey = "TabBarAnimationKey";
 
-    private readonly INavigationService navigationService;
+    readonly INavigationService navigationService;
     [AutoBindable]
     readonly bool isTabBarHidden = false;
 
@@ -22,8 +21,6 @@ public partial class AppShell : SimpleShell
     public AppShell(INavigationService navigationService)
 	{
         this.navigationService = navigationService;
-
-        Loaded += AppShellLoaded;
 
         Routing.RegisterRoute(PageType.MaterialDetailPage.ToString(), typeof(MaterialDetailPage));
         Routing.RegisterRoute(PageType.CameraPage.ToString(), typeof(CameraPage));
@@ -46,11 +43,12 @@ public partial class AppShell : SimpleShell
         var shellItem = new ShellItem();
         shellItem.Items.Add(firstTab);
         shellItem.Items.Add(secondTab);
-
         Items.Add(shellItem);
 
-        Background = Color.FromArgb("#f8f5fb");
+        this.Background(Themes.Surface);
         Content = RenderContent(firstTab, secondTab);
+
+        Loaded += AppShellLoaded;
     }
 
 
@@ -76,7 +74,7 @@ public partial class AppShell : SimpleShell
 
     partial void OnIsTabBarHiddenChanged(bool value)
     {
-        tabBar.AbortAnimation(TabBarAnimation);
+        tabBar.AbortAnimation(TabBarAnimationKey);
 
         var height = tabBar.Height;
         var animation = new Animation(
@@ -85,7 +83,7 @@ public partial class AppShell : SimpleShell
             value ? height : 0);
 
         tabBar.IsVisible(true);
-        animation.Commit(tabBar, TabBarAnimation, easing: Easing.CubicInOut, finished: (d, cancelled) => {
+        animation.Commit(tabBar, TabBarAnimationKey, easing: Easing.CubicInOut, finished: (d, cancelled) => {
             if (!cancelled)
                 tabBar.IsVisible(!value);
         });

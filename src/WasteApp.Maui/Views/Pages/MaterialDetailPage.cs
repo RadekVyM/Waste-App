@@ -1,5 +1,4 @@
-﻿using Maui.BindableProperty.Generator.Core;
-using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.Shapes;
 using SimpleToolkit.Core;
 using WasteApp.Core.Extensions;
 using WasteApp.Core.Interfaces.Services;
@@ -10,17 +9,13 @@ using Path = Microsoft.Maui.Controls.Shapes.Path;
 
 namespace WasteApp.Maui.Views.Pages;
 
-public class MaterialDetailPage : BaseContentPage
+public class MaterialDetailPage : BaseContentPage<MaterialDetailPageViewModel>
 {
-    const double SidePadding = 25;
-
     readonly Header header;
     readonly ScrollView scrollView;
 
-    MaterialDetailPageViewModel ViewModel => BindingContext as MaterialDetailPageViewModel;
 
-
-    public MaterialDetailPage(MaterialDetailPageViewModel viewModel, INavigationService navigationService) : base(navigationService)
+    public MaterialDetailPage(MaterialDetailPageViewModel viewModel, INavigationService navigationService) : base(viewModel, navigationService)
     {
         BindingContext = viewModel;
 
@@ -213,21 +208,18 @@ partial class Header : Grid
     readonly double scrollPosition;
 
     readonly PathGeometryConverter pathGeometryConverter = new();
-    readonly INavigationService navigationService;
-    Grid innerGrid;
-    RoundRectangle backgroundRect;
-    Border materialCard;
-    StyledLabel title;
-    Path leftBottle;
-    Path rightBottle;
+    readonly Grid innerGrid;
+    readonly RoundRectangle backgroundRect;
+    readonly Border materialCard;
+    readonly StyledLabel title;
+    readonly Path leftBottle;
+    readonly Path rightBottle;
 
 
     public Header(INavigationService navigationService) : base()
     {
         // TODO: The input transparency is still weird
 
-        this.navigationService = navigationService;
-        
 #if IOS || MACCATALYST
         InputTransparent = true;
         CascadeInputTransparent = false;

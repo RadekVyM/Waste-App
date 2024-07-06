@@ -1,5 +1,4 @@
-﻿using Maui.BindableProperty.Generator.Core;
-using SimpleToolkit.Core;
+﻿using SimpleToolkit.Core;
 using WasteApp.Core.Models;
 using WasteApp.Core.ViewModels;
 
@@ -8,9 +7,9 @@ namespace WasteApp.Maui.Views.Controls;
 partial class WasteProcessingSelection : ScrollView
 {
     [AutoBindable(DefaultBindingMode = "TwoWay")]
-    WasteProcessingEnum selectedWasteProcessing;
+    readonly WasteProcessingEnum selectedWasteProcessing;
 
-    HorizontalStackLayout stackLayout;
+    readonly HorizontalStackLayout stackLayout;
 
 
     public WasteProcessingSelection(IEnumerable<WasteProcessingViewModel> wasteProcessings) : base()
@@ -59,11 +58,11 @@ partial class WasteProcessingSelection : ScrollView
 partial class WasteProcessingCard : StyledContentButton
 {
     [AutoBindable]
-    bool isSelected;
+    readonly bool isSelected;
 
-    Border border;
-    Icon icon;
-    Label label;
+    readonly Border border;
+    readonly Icon icon;
+    readonly Label label;
 
 
     public WasteProcessingCard(WasteProcessingViewModel wasteProcessing) : base()

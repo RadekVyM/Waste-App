@@ -3,9 +3,9 @@ using WasteApp.Maui.Views.Controls;
 
 namespace WasteApp.Maui.Views.Pages;
 
-public class CalendarPage : BaseRootContentPage
+public class CalendarPage : BaseRootContentPage<object>
 {
-    public CalendarPage(INavigationService navigationService) : base(navigationService)
+    public CalendarPage(INavigationService navigationService) : base(null, navigationService)
     {
         Content = new Grid
         {

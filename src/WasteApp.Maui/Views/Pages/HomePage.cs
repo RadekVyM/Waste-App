@@ -7,20 +7,15 @@ using WasteApp.Maui.Views.Controls;
 
 namespace WasteApp.Maui.Views.Pages;
 
-public class HomePage : BaseRootContentPage
+public class HomePage : BaseRootContentPage<HomePageViewModel>
 {
-    const double SidePadding = 25;
     const double BottomPadding = 25;
-
-    HomePageViewModel ViewModel => BindingContext as HomePageViewModel;
 
     readonly ContentView footerView;
 
 
-    public HomePage(HomePageViewModel viewModel, INavigationService navigationService) : base(navigationService)
+    public HomePage(HomePageViewModel viewModel, INavigationService navigationService) : base(viewModel, navigationService)
     {
-        BindingContext = viewModel;
-
         Content = new Grid
         {
             RowDefinitions = Rows.Define(Auto, Star),
@@ -115,7 +110,7 @@ public class HomePage : BaseRootContentPage
                     .Size(AvatarSize)
                     .Content(
                         new Image()
-                            .Source("logo.jpg")
+                            .Source("profile_picture.jpg")
                             .Size(AvatarSize))
             ]);
 

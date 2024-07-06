@@ -4,14 +4,19 @@ using SimpleToolkit.Core;
 
 namespace WasteApp.Maui.Views.Pages;
 
-public class BaseContentPage : ContentPage, IQueryAttributable
+public class BaseContentPage<TViewModel> : ContentPage, IQueryAttributable where TViewModel : class
 {
+    protected const double SidePadding = 26;
+
     protected readonly INavigationService navigationService;
     private IParameters parameters;
 
+    protected TViewModel ViewModel => BindingContext as TViewModel;
 
-    public BaseContentPage(INavigationService navigationService)
+
+    public BaseContentPage(TViewModel viewModel, INavigationService navigationService)
     {
+        BindingContext = viewModel;
         this.navigationService = navigationService;
 
         Loaded += BaseContentPageLoaded;

@@ -1,5 +1,4 @@
-﻿using Android.Telecom;
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls.Shapes;
 using SimpleToolkit.Core;
 using WasteApp.Core.Extensions;
@@ -10,12 +9,9 @@ using WasteApp.Maui.Views.Controls;
 
 namespace WasteApp.Maui.Views.Pages;
 
-public class CameraPage : BaseContentPage
+public class CameraPage : BaseContentPage<CameraPageViewModel>
 {
-    const double SidePadding = 25;
     const string ScanAnimationKey = "ScanAnimationKey";
-
-    CameraPageViewModel ViewModel => BindingContext as CameraPageViewModel;
 
     readonly CameraView cameraView;
     readonly AppBar appBar;
@@ -24,10 +20,8 @@ public class CameraPage : BaseContentPage
     readonly GraphicsView scanGraphicsView;
 
 
-    public CameraPage(CameraPageViewModel viewModel, INavigationService navigationService) : base(navigationService)
+    public CameraPage(CameraPageViewModel viewModel, INavigationService navigationService) : base(viewModel, navigationService)
     {
-        BindingContext = viewModel;
-
         Content = new Grid()
             .Children([
                 new CameraView()
@@ -77,14 +71,17 @@ public class CameraPage : BaseContentPage
     {
         StartScannerAnimation();
 
-        try
+        if (cameraView.IsAvailable)
         {
-            await cameraView.StartCameraPreview(CancellationToken.None);
-        }
-        catch (Exception exception)
-        {
-            // TODO: IDK why this exception is thrown...
-            System.Diagnostics.Debug.WriteLine(exception.Message);
+            try
+            {
+                await cameraView.StartCameraPreview(CancellationToken.None);
+            }
+            catch (Exception exception)
+            {
+                // TODO: IDK why this exception is thrown...
+                System.Diagnostics.Debug.WriteLine(exception.Message);
+            }
         }
 
         base.OnAppearing();
@@ -107,10 +104,10 @@ public class CameraPage : BaseContentPage
 
         var animation = new Animation
         {
-            { 0, 0.25, new Animation(UpdateEndPosition, 0, 1) },
-            { 0.25, 0.5, new Animation(UpdateStartPosition, 0, 1) },
-            { 0.5, 0.75, new Animation(UpdateEndPosition, 1, 0) },
-            { 0.75, 1, new Animation(UpdateStartPosition, 1, 0) }
+            { 0, 0.3, new Animation(UpdateEndPosition, 0, 1, Easing.SinInOut) },
+            { 0.3, 0.5, new Animation(UpdateStartPosition, 0, 1, Easing.SinInOut) },
+            { 0.5, 0.8, new Animation(UpdateEndPosition, 1, 0, Easing.SinInOut) },
+            { 0.8, 1, new Animation(UpdateStartPosition, 1, 0, Easing.SinInOut) }
         };
 
         animation.Commit(scanGraphicsView, ScanAnimationKey, length: 4000, repeat: () => true);
@@ -191,7 +188,7 @@ class ScanDrawable : IDrawable
 {
     const float SidePadding = 25f;
     const float CornerRadius = 25f;
-    const float StrokeSize = 9f;
+    const float StrokeSize = 8f;
 
     public float StartPosition { get; set; } = 0f;
     public float EndPosition { get; set; } = 0f;
@@ -258,7 +255,7 @@ class ScanDrawable : IDrawable
 
         var gradient = new LinearGradientPaint([
             new PaintGradientStop(0, Color.FromArgb("#00ffffff")),
-            new PaintGradientStop(1, Color.FromArgb("#ffffffff"))
+            new PaintGradientStop(1, Color.FromArgb("#aaffffff"))
         ])
         {
             StartPoint = new Point(0, directionUp ? 1 : 0),

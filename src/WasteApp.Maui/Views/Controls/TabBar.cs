@@ -1,5 +1,4 @@
-﻿using Maui.BindableProperty.Generator.Core;
-using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.Shapes;
 using SimpleToolkit.Core;
 using Path = Microsoft.Maui.Controls.Shapes.Path;
 
@@ -15,8 +14,8 @@ public partial class TabBar : Grid
     [AutoBindable]
     readonly Thickness innerPadding;
 
-    Grid innerGrid;
-    Path backgroundPath;
+    readonly Grid innerGrid;
+    readonly Path backgroundPath;
 
 
     public TabBar(ShellContent first, ShellContent second, EventHandler itemClicked, EventHandler cameraClicked) : base()
@@ -35,7 +34,7 @@ public partial class TabBar : Grid
             .Row(1)
             .Children([
                 RenderTabItem(first, itemClicked).Column(0),
-                RenderTabItem("leaf.png").Column(1).Assign(out TabItem camera),
+                RenderTabItem("scan.png").Column(1).Assign(out TabItem camera),
                 RenderTabItem(second, itemClicked).Column(2)
             ])
             .Height(TabBarHeight)
@@ -101,7 +100,7 @@ partial class TabItem : ContentButton
     [AutoBindable(DefaultValue = "false")]
     readonly bool isSelected;
 
-    RoundRectangle roundRectangle;
+    readonly RoundRectangle roundRectangle;
 
     public TabItem(ImageSource icon) : base()
     {

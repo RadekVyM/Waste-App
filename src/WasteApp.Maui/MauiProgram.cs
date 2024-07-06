@@ -36,21 +36,7 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        EntryHandler.Mapper.AppendToMapping("RemoveUnderline", (handler, entry) =>
-        {
-#if ANDROID
-            handler.PlatformView.Background = null;
-            handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-#elif IOS || MACCATALYST
-            handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
-            handler.PlatformView.Layer.BorderWidth = 0;
-            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
-#elif WINDOWS
-            handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
-            handler.PlatformView.Background = null;
-            handler.PlatformView.FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(0);
-#endif
-        });
+        RemoveEntryBorder();
 
 #if IOS || ANDROID
         builder.DisplayContentBehindBars();
@@ -59,6 +45,13 @@ public static class MauiProgram
         builder.SetDefaultStatusBarAppearance(Colors.Transparent, false);
 #endif
 
+        RegisterServices(builder);
+
+        return builder.Build();
+    }
+
+    private static void RegisterServices(MauiAppBuilder builder)
+    {
         builder.Services.AddTransient<AppShell>();
 
         builder.Services.AddTransient<HomePage>();
@@ -74,7 +67,24 @@ public static class MauiProgram
         builder.Services.AddTransient<HomePageViewModel>();
         builder.Services.AddTransient<CameraPageViewModel>();
         builder.Services.AddTransient<MaterialDetailPageViewModel>();
+    }
 
-        return builder.Build();
+    private static void RemoveEntryBorder()
+    {
+        EntryHandler.Mapper.AppendToMapping("RemoveEntryBorder", (handler, entry) =>
+        {
+#if ANDROID
+            handler.PlatformView.Background = null;
+            handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+#elif IOS || MACCATALYST
+            handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
+            handler.PlatformView.Layer.BorderWidth = 0;
+            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#elif WINDOWS
+            handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+            handler.PlatformView.Background = null;
+            handler.PlatformView.FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+        });
     }
 }

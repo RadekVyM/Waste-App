@@ -7,7 +7,8 @@ public class NavigationService : INavigationService
 {
     private const string ParametersKey = "Parameters";
 
-    private readonly IList<PageType> rootPages = [
+    private readonly IList<PageType> rootPages =
+    [
         PageType.HomePage,
         PageType.CalendarPage,
     ];

@@ -2,7 +2,8 @@
 
 namespace WasteApp.Maui.Views.Pages;
 
-public class BaseRootContentPage(INavigationService navigationService) : BaseContentPage(navigationService)
+public class BaseRootContentPage<TViewModel>(TViewModel viewModel, INavigationService navigationService) :
+    BaseContentPage<TViewModel>(viewModel, navigationService) where TViewModel : class
 {
     protected override void OnSafeAreaChanged(Thickness safeArea)
     {

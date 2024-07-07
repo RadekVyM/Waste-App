@@ -2,6 +2,7 @@
 
 **.NET MAUI** implementation of [Waste App](https://dribbble.com/shots/14433671-Waste-App) design by [Sara Salehi](https://dribbble.com/SaraSalehi).
 
+https://github.com/RadekVyM/Waste-App/assets/65116078/423cf52d-dccc-4b11-93b5-47d66acaa705
 
 This project demonstrates how to create .NET MAUI apps with tailored UI using **C# only**.
 
@@ -22,7 +23,7 @@ Here are some resources to learn more about .NET MAUI:
 
 ## Features
 
-The app's UI is built only with .NET MAUI APIs and my [SimpleToolkit](https://github.com/RadekVyM/SimpleToolkit) library. The [.NET MAUI Markup Community Toolkit](https://github.com/CommunityToolkit/Maui.Markup) and [Maui.BindableProperty.Generator](https://github.com/rrmanzano/maui-bindableproperty-generator) made building the UI using C# only much easier.
+The app's UI is built with .NET MAUI APIs, [CommunityToolkit.Maui.Camera](https://github.com/CommunityToolkit/Maui) and my [SimpleToolkit](https://github.com/RadekVyM/SimpleToolkit) library. The [.NET MAUI Markup Community Toolkit](https://github.com/CommunityToolkit/Maui.Markup) and [Maui.BindableProperty.Generator](https://github.com/rrmanzano/maui-bindableproperty-generator) made building the UI using C# only much easier.
 
 <p align="center">
     <img src="./Images/android_wasteapp.webp" width="222">

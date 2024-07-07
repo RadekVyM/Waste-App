@@ -1,27 +1,33 @@
 ﻿using System.Windows.Input;
+using WasteApp.Core.Interfaces.Services;
+using WasteApp.Core.Models;
 
-namespace WasteApp.Core
+namespace WasteApp.Core.ViewModels;
+
+public class CameraPageViewModel : BasePageViewModel
 {
-    public class CameraPageViewModel : BasePageViewModel, ICameraPageViewModel
+    Material? foundMaterial;
+
+    public Material? FoundMaterial
     {
-        Material foundMaterial;
-
-        public Material FoundMaterial
+        get => foundMaterial;
+        set
         {
-            get => foundMaterial;
-            set
-            {
-                foundMaterial = value;
-                OnPropertyChanged(nameof(FoundMaterial));
-            }
+            foundMaterial = value;
+            OnPropertyChanged(nameof(FoundMaterial));
         }
+    }
 
-        public ICommand MaterialCommand { get; private set; }
+    public ICommand MaterialCommand { get; private init; }
 
-        public CameraPageViewModel(INavigationService navigationService, IMaterialsService materialsService) : base(navigationService)
+    public CameraPageViewModel(INavigationService navigationService, IMaterialsService materialsService)
+    {
+        FoundMaterial = materialsService.GetMaterial(MaterialEnum.Plastic);
+        MaterialCommand = new RelayCommand(async () => 
         {
-            FoundMaterial = materialsService.GetMaterial(MaterialEnum.Plastic);
-            MaterialCommand = new RelayCommand(() => navigationService.Push(PageEnum.MaterialDetailPage, materialsService.GetMaterial(MaterialEnum.Plastic)) );
-        }
+            var material = materialsService.GetMaterial(MaterialEnum.Plastic) ?? throw new Exception("Material cannot be null here.");
+
+            await navigationService.GoTo(PageType.MaterialDetailPage, new MaterialDetailPageParameters(material));
+        });
     }
 }

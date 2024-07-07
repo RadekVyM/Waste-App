@@ -1,8 +1,7 @@
-﻿namespace WasteApp.Core
+﻿namespace WasteApp.Core.Models;
+
+public class Item
 {
-    public class Item
-    {
-        public string Name { get; set; }
-        public string Image { get; set; }
-    }
+    public required string Name { get; set; }
+    public required string Image { get; set; }
 }

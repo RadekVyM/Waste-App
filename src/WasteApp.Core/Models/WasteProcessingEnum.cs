@@ -1,7 +1,6 @@
-﻿namespace WasteApp.Core
+﻿namespace WasteApp.Core.Models;
+
+public enum WasteProcessingEnum
 {
-    public enum WasteProcessingEnum
-    {
-        Recycle, Green, Garbage, Yard
-    }
+    Recycle, Green, Garbage, Yard
 }

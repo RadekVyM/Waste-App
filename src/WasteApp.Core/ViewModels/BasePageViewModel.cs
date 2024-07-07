@@ -1,20 +1,26 @@
-﻿using System.ComponentModel;
-using System.Windows.Input;
+﻿using WasteApp.Core.Interfaces.ViewModels;
 
-namespace WasteApp.Core
+namespace WasteApp.Core.ViewModels;
+
+public class BasePageViewModel : BaseViewModel, IBasePageViewModel
 {
-    public class BasePageViewModel : INotifyPropertyChanged, IBasePageViewModel
+    public virtual void OnApplyParameters(IParameters parameters)
     {
-        public ICommand GoBackCommand { get; protected set; }
+    }
 
-        public BasePageViewModel(INavigationService navigationService)
-        {
-            GoBackCommand = new RelayCommand(() => navigationService.Pop());
-        }
+    public virtual void OnApplyFirstParameters(IParameters parameters)
+    {
+    }
 
-        public virtual void OnPagePushing(params object[] parameters) { }
+    public virtual void OnApplyOtherParameters(IParameters parameters)
+    {
+    }
 
-        public void OnPropertyChanged(string property) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-        public event PropertyChangedEventHandler PropertyChanged;
+    public virtual void OnNavigatedTo()
+    {
+    }
+
+    public virtual void OnNavigatedFrom()
+    {
     }
 }

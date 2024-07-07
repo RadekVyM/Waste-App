@@ -43,6 +43,7 @@ public static class MauiProgram
 #endif
 #if ANDROID
         builder.SetDefaultStatusBarAppearance(Colors.Transparent, false);
+        builder.SetDefaultNavigationBarAppearance(Colors.Transparent);
 #endif
 
         RegisterServices(builder);
